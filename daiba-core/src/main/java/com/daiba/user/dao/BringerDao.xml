@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.user.dao.BringerDao">
+
+    <update id="updateAcceptCountAndWeekMoney">
+        UPDATE bringer SET accept_count=accept_count+1,week_income=week_income+#{orderMoney} WHERE bringer_id=#{id}
+    </update>
+
+    <update id="updateWeekIncome">
+        UPDATE bringer SET week_income=0 WHERE bringer_id=#{bringerId}
+    </update>
+
+    <select id="selectAllBringer" resultMap="bringerResult">
+        SELECT bringer_id,week_income FROM bringer WHERE week_income > 0
+    </select>
+
+    <parameterMap id="bringerParameter" type="Bringer">
+        <parameter property="bringerId" resultMap="bringerResult"/>
+        <parameter property="acceptCount" resultMap="bringerResult"/>
+        <parameter property="creditworthiness" resultMap="bringerResult"/>
+        <parameter property="badRepCount" resultMap="bringerResult"/>
+        <parameter property="mediumRepCount" resultMap="bringerResult"/>
+        <parameter property="goodRepCount" resultMap="bringerResult"/>
+        <parameter property="income" resultMap="bringerResult"/>
+        <parameter property="weekIncome" resultMap="bringerResult"/>
+    </parameterMap>
+
+    <resultMap id="bringerResult" type="Bringer">
+        <id column="bringer_id" property="bringerId" jdbcType="INTEGER"/>
+        <result column="accept_count" property="acceptCount" jdbcType="INTEGER"/>
+        <result column="creditworthiness" property="creditworthiness" jdbcType="DOUBLE"/>
+        <result column="bad_rep_count" property="badRepCount" jdbcType="INTEGER"/>
+        <result column="medium_rep_count" property="mediumRepCount" jdbcType="INTEGER"/>
+        <result column="good_rep_count" property="goodRepCount" jdbcType="INTEGER"/>
+        <result column="income" property="income" jdbcType="INTEGER"/>
+        <result column="week_income" property="weekIncome" jdbcType="INTEGER"/>
+    </resultMap>
+
+</mapper>

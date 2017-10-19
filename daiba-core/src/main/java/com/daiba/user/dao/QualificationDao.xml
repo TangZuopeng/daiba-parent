@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.user.dao.QualificationDao">
+
+
+    <!--<select id="selectQualificationIdByCampus" resultType="java.lang.Integer" parameterType="java.lang.String">-->
+    <!--SELECT qualification_id FROM address WHERE campus=#{campus}-->
+    <!--</select>-->
+
+    <!--<select id="selectBringIdById" resultType="java.lang.Integer" parameterType="java.util.List">-->
+    <!--SELECT use_id-->
+    <!--FROM qualification-->
+    <!--WHERE qualification_id in-->
+    <!--<foreach collection="idList" item="id" index="index" open="(" close=")" separator=",">-->
+    <!--#{id}-->
+    <!--</foreach>-->
+    <!--</select>-->
+
+    <select id="selectOpenIdByCampus" resultType="java.lang.String">
+        SELECT open_id
+        FROM user
+        WHERE bri_id in (
+            SELECT q.bri_id
+            FROM qualification q,bringer b
+            WHERE qualification_id in (
+              SELECT qualification_id FROM address WHERE campus=#{campus1} OR campus=#{campus2}
+            )
+            AND b.is_receiver = #{isReceiver}
+            AND b.bringer_id = q.bri_id
+        )
+    </select>
+
+    <select id="selectAddressByBriId" resultMap="addressResult" parameterType="java.lang.Integer">
+        SELECT *
+        FROM address
+        WHERE qualification_id in (
+          SELECT qualification_id FROM qualification WHERE bri_id=#{briId}
+        )
+    </select>
+
+    <resultMap id="qualificationResult" type="Qualification">
+        <id column="qualification_id" property="qualificationId"/>
+        <result column="use_id" property="useId"/>
+        <result column="bri_id" property="briId"/>
+        <result column="adm_id" property="admId"/>
+        <result column="student_num" property="studentNum"/>
+        <result column="human_id" property="humanId"/>
+        <result column="apply_time" property="applyTime" javaType="DATE"/>
+        <result column="sta_id" property="staId"/>
+        <result column="check_time" property="checkTime" javaType="DATE"/>
+        <result column="real_name" property="realName"/>
+    </resultMap>
+
+    <resultMap id="addressResult" type="Address">
+        <id column="address_id" property="addressId"/>
+        <result column="qualification_id" property="qualificationId"/>
+        <result column="school" property="school"/>
+        <result column="campus" property="campus"/>
+        <result column="build" property="build"/>
+        <result column="room" property="room"/>
+    </resultMap>
+
+    <resultMap id="userResult" type="User">
+        <id column="user_id" property="userId"/>
+        <result column="bri_id" property="briId"/>
+        <result column="phone_num" property="phoneNum"/>
+        <result column="register_time" property="registerTime"/>
+        <result column="recetly_login_time" property="recetlyLoginTime"/>
+        <result column="open_id" property="openId"/>
+    </resultMap>
+
+</mapper>

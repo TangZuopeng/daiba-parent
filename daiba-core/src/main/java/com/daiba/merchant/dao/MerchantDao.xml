@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.merchant.dao.MerchantDao">
+
+    <resultMap id="merchantResultMap" type="Merchant">
+        <id property="merchantId" column="merchant_id" jdbcType="VARCHAR"/>
+        <result property="merchantName" column="merchant_name" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="merchantState" column="merchant_state" jdbcType="INTEGER"/>
+        <result property="merchantAdd" column="merchant_add" jdbcType="VARCHAR"/>
+        <result property="merchantPhone" column="merchant_phone" jdbcType="VARCHAR"/>
+        <result property="openId" column="open_id" jdbcType="VARCHAR"/>
+        <result property="weekIncome" column="week_income" jdbcType="INTEGER"/>
+        <result property="income" column="income" jdbcType="INTEGER"/>
+        <result property="weekSale" column="week_sale" javaType="INTEGER"/>
+        <result property="sale" column="sale" javaType="INTEGER"/>
+        <result property="isSelf" column="is_self" javaType="INTEGER"/>
+    </resultMap>
+
+    <select id="selectAllMerchantByCode" resultMap="merchantResultMap" >
+        SELECT *
+        FROM merchant m
+        WHERE m.merchant_id LIKE #{code}
+        AND m.merchant_state = #{state}
+    </select>
+
+    <update id="updateMerchantIncomeAndSaleById">
+        UPDATE merchant
+        SET week_income = week_income + #{goodsMoney},
+            week_sale = week_sale + #{count}
+        WHERE merchant_id = #{merchantId}
+    </update>
+
+</mapper>

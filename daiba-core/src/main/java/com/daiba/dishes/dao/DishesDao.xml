@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.dishes.dao.DishesDao">
+
+    <resultMap id="dishesResultMap" type="Dishes">
+        <id property="dishesId" column="dishes_id" jdbcType="VARCHAR"/>
+        <result property="merchantId" column="merchant_id" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="img" column="img" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="INTEGER"/>
+        <result property="discount" column="discount" jdbcType="INTEGER"/>
+        <result property="monthVolume" column="month_volume" jdbcType="INTEGER"/>
+        <result property="isHot" column="is_hot" jdbcType="INTEGER"/>
+        <result property="inventory" column="inventory" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="firmDishesResultMap" type="FirmDishes">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="firmId" column="firm_id" jdbcType="VARCHAR"/>
+        <result property="count" column="count" jdbcType="INTEGER"/>
+        <result property="dishesId" column="dishes_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectAllDishesByMerchantId" resultMap="dishesResultMap">
+        SELECT *
+        FROM dishes
+        WHERE merchant_id = #{merchantId}
+    </select>
+
+    <insert id="insertFirmDishes">
+        INSERT INTO firm_dishes(firm_id,dishes_id,count)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{firmId},#{item.dishesId},#{item.count})
+        </foreach>
+    </insert>
+
+    <select id="selectCartByFirmId" resultType="java.util.HashMap">
+        SELECT d.name,d.price,fd.count,m.merchant_add,m.merchant_name
+        FROM firm_dishes fd, dishes d,merchant m
+        WHERE firm_id = #{firmId}
+        AND fd.dishes_id = d.dishes_id
+        AND d.merchant_id = m.merchant_id
+    </select>
+
+    <select id="selectMerchantMessageByFirmId" resultType="java.util.HashMap">
+        SELECT d.dishes_id,m.merchant_id,d.name,d.price,d.discount,fd.count,m.open_id,m.week_sale,m.week_income
+        FROM firm_dishes fd, dishes d,merchant m
+        WHERE firm_id = #{firmId}
+        AND fd.dishes_id = d.dishes_id
+        AND d.merchant_id = m.merchant_id
+        ORDER BY dishes_id
+    </select>
+
+    <update id="updateDishesVolumeById" >
+        UPDATE dishes
+        SET month_volume = month_volume + #{count}
+        WHERE dishes_id = #{dishesId}
+    </update>
+
+</mapper>

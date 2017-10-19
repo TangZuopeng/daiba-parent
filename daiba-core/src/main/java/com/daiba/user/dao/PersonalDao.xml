@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.user.dao.PersonalDao">
+    <!--个人中心绑定收货地址的实体类-->
+    <resultMap id="conmsgInfo" type="ConsigneeMessage">
+        <id column="conmsg_id" property="conmsgId" ></id>
+        <result column="use_id" property="useId"></result>
+        <result column="call_name" property="callName" ></result>
+        <result column="phone_num" property="phoneNum"></result>
+        <result  column="school" property="school"></result>
+        <result column="campus" property="campus"></result>
+        <result column="build" property="build"></result>
+        <result column="room" property="room"></result>
+    </resultMap>
+
+    <!--快递_用户信息-->
+    <resultMap id="userInfo" type="User">
+        <id property="userId" column="user_id"></id>
+        <result property="phoneNum" column="phone_num"></result>
+        <result property="password" column="password"></result>
+        <result property="name" column="name"></result>
+        <result property="portrait" column="portrait"></result>
+        <result property="registerTime" column="register_time" javaType="DATE" ></result>
+        <result property="role" column="role"></result>
+        <result property="recetlyLoginTime" column="recetly_login_time" javaType="DATE"></result>
+        <result property="orderNum" column="order_num"></result>
+        <result property="spending" column="spending"></result>
+        <result property="sex" column="sex"></result>
+    </resultMap>
+
+    <!--快递_用户流水认证表-->
+    <resultMap id="qualificationInfo" type="Qualification">
+        <id column="qualification_id" property="qualificationId"></id>
+        <result column="use_id" property="useId"></result>
+        <result column="bri_id" property="briId"></result>
+        <result column="adm_id" property="admId"></result>
+        <result column="student_num" property="studentNum"></result>
+        <result column="human_id" property="humanId"></result>
+        <result column="apply_time" property="applyTime" javaType="DATE"></result>
+        <result column="sta_id" property="staId"></result>
+        <result column="check_time" property="checkTime" javaType="DATE"></result>
+        <result column="real_name" property="realName"></result>
+    </resultMap>
+
+    <resultMap id="bringerInfo" type="java.util.HashMap">
+        <id column="bringer_id" property="bringerId"/>
+        <result column="accept_count" property="acceptCount"></result>
+        <result column="creditworthiness" property="creditworthiness"></result>
+        <result column="week_income" property="weekIncome"></result>
+        <result column="is_receiver" property="isReceiver"></result>
+    </resultMap>
+
+
+    <!--快递_个人中心之地址管理-->
+    <insert id="addDeliveryAddress" parameterType="ConsigneeMessage">
+        insert into consignee_message (use_id,call_name,phone_num,campus,build,room)values (#{useId},#{callName},#{phoneNum},#{campus},#{build},#{room});
+    </insert>
+
+    <select id="getAddressesByUserId" parameterType="int" resultMap="conmsgInfo">
+        select conmsg_id,use_id,call_name,phone_num,school,campus,build,room from consignee_message where use_id=#{useId};
+    </select>
+
+   <update id="editAddress" parameterType="ConsigneeMessage">
+       update consignee_message set call_name=#{callName},phone_num=#{phoneNum},campus=#{campus},build=#{build},room=#{room} where conmsg_id=#{conmsgId};
+   </update>
+    
+    <delete id="deleteAddressByConmsgId" parameterType="int">
+        delete from consignee_message where conmsg_id=#{conmsgId};
+    </delete>
+
+    <select id="getAddressByConmsgId" parameterType="int" resultType="ConsigneeMessage">
+        select conmsg_id,use_id,call_name,phone_num,school,campus,build,room from consignee_message where conmsg_id=#{conmsgId};
+    </select>
+
+    <!--快递_个人中心之用户信息管理-->
+    <update id="editUserNickName" >
+        update user set name=#{nickName,jdbcType=VARCHAR} where user_id=#{useId,jdbcType=INTEGER}
+    </update>
+
+    <update id="editSex">
+        update user set sex=#{sexCode,jdbcType=INTEGER} where user_id=#{userId,jdbcType=INTEGER}
+    </update>
+
+    <update id="editIsReceiver">
+        update bringer set is_receiver=#{isReceiver,jdbcType=INTEGER} where bringer_id = (select bri_id from user where user_id = #{userId,jdbcType=INTEGER})
+    </update>
+
+    <update id="applyBringer" >
+        insert  into qualification(use_id,sta_id,apply_time)values (#{useId,jdbcType=INTEGER},#{userStatus,jdbcType=INTEGER},now());
+    </update>
+
+    <select id="isApplyExist" parameterType="int" resultType="int">
+        select count(*) from qualification where use_id=#{useId}
+    </select>
+
+    <select id="findUserByUserId" parameterType="int" resultType="User">
+        select * from user where  user_id=#{userId}
+    </select>
+
+    <select id="getQualificationInfo" parameterType="int" resultType="Qualification">
+        select use_id,bri_id,adm_id,student_num,human_id,apply_time,sta_id,check_time,real_name from qualification where use_id=#{useId};
+    </select>
+
+    <select id="getBringerInfo" parameterType="int" resultMap="bringerInfo">
+        select accept_count,creditworthiness,week_income,is_receiver from bringer where bringer_id=#{bringerId}
+    </select>
+
+    <select id="selectBringerRealName" parameterType="int" resultType="java.lang.String">
+        select real_name from qualification where bri_id=#{briId};
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,38 @@
+.subTitle{
+	font-family: "微软雅黑";
+	text-align: center;
+	color: black;
+	padding: 8px;
+	margin-bottom: 0;
+}
+
+.image{
+	height: 50px;
+	width: 50px;
+	margin: 5px 0;
+	vertical-align:middle;
+}
+
+.info{
+	margin-left: 5px;
+	margin-bottom: 5px;
+	display: inline-block;
+	vertical-align:middle;
+}
+.title{
+	color: black;
+	margin-bottom: 5px;
+}
+.submit{
+	position: absolute;
+	bottom: 45px;
+}
+
+.mui-btn{
+	border-radius: 8px;
+}
+
+.mui-btn-block{
+	width: 90%;
+	margin-left: 5%;
+}

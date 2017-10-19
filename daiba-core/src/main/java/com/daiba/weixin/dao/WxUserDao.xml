@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.weixin.dao.WxUserDao">
+
+    <insert id="insert" parameterType="com.daiba.weixin.model.WxUser">
+        INSERT INTO wx_user(
+            open_id, nickname, sex, province, city, country, head_img_url, privilege, union_id
+        ) VALUES(
+            #{openid},#{nickname},#{sex},#{province},#{city},#{country},#{headImgUrl},#{privilege},#{unionId}
+        )
+
+        /*
+        对于不支持自动生成类型的数据库或可能不支持自动生成主键 JDBC 驱动来说，MyBatis 有另外一种方法来生成主键。对于不支持自动生成类型的数据库或可能不支持自动生成主键 JDBC 驱动来说，MyBatis 有另外一种方法来生成主键。
+        select @@IDENTITY 得到上一次插入记录时自动产生的ID
+        */
+        <selectKey resultType="int" keyProperty="openid">
+            select @@IDENTITY as id
+        </selectKey>
+    </insert>
+
+    <update id="update" parameterType="com.daiba.weixin.model.WxUser">
+        update wx_user set
+          nickname=#{nickname},
+          sex=#{sex},
+          province=#{province},
+          city=#{city},
+          country=#{country},
+          head_img_url=#{headImgUrl},
+          privilege=#{privilege},
+          union_id=#{unionId}
+       where open_id=#{openid}
+    </update>
+
+    <select id="selectAll" resultType="com.daiba.weixin.model.WxUser">
+        select * from wx_user order by open_id asc
+    </select>
+    <select id="selectById" resultType="com.daiba.weixin.model.WxUser" parameterType="java.lang.String">
+        select * from wx_user where open_id = #{openid}
+    </select>
+
+
+    <delete id="deleteAll">
+        delete * from wx_user
+    </delete>
+    <delete id="deleteById" parameterType="java.lang.String">
+        delete * from wx_user where open_id = #{openid}
+    </delete>
+
+
+</mapper>

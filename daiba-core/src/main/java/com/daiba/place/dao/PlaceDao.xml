@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.place.dao.PlaceDao">
+
+    <select id="select3NameByCode" resultType="java.lang.String">
+       SELECT name FROM place WHERE code in (#{campusCode},#{addCode},#{companyCode})
+    </select>
+
+    <resultMap id="myplace" type="Place">
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="parentCode" column="parent_code"/>
+    </resultMap>
+
+    <select id="getPlacesByParentId" resultType="Place" parameterType="java.lang.String">
+        select * from place where parent_code=#{parentCode}
+    </select>
+
+</mapper>

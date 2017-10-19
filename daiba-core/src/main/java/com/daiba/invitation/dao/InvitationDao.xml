@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.invitation.dao.InvitationDao">
+
+    <insert id="insert">
+        INSERT INTO invitation(invitation_code)
+        VALUES (#{invitationCode})
+    </insert>
+
+    <update id="update">
+        UPDATE invitation SET code_statue=#{codeStatue} WHERE invitation_code=#{invitationCode}
+    </update>
+
+    <select id="select" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT code_statue FROM invitation WHERE invitation_code = #{invitationCode}
+    </select>
+    
+</mapper>

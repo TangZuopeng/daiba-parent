@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.order.dao.OrderDao">
+
+    <resultMap id="ordersResult" type="Order">
+        <id property="orderId" column="order_id" jdbcType="VARCHAR"/>
+        <result property="sta_id" column="staId" jdbcType="INTEGER"/>
+        <result property="company" column="company" jdbcType="VARCHAR"/>
+        <result property="receiver" column="receiver" jdbcType="VARCHAR"/>
+        <result property="acceptAddCode" column="accept_add_code" jdbcType="VARCHAR"/>
+        <result property="acceptAddress" column="accept_address" jdbcType="VARCHAR"/>
+        <result property="takeNum" column="take_num" jdbcType="VARCHAR"/>
+        <result property="reservedPhone" column="reserved_phone" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <parameterMap id="ordersParameterMap" type="Order">
+        <parameter property="orderId" resultMap="ordersResult" jdbcType="VARCHAR"/>
+        <parameter property="company" resultMap="ordersResult" jdbcType="VARCHAR"/>
+        <parameter property="receiver" resultMap="ordersResult" jdbcType="VARCHAR"/>
+        <parameter property="acceptAddCode" resultMap="ordersResult" jdbcType="VARCHAR"/>
+        <parameter property="acceptAddress" resultMap="ordersResult" jdbcType="VARCHAR"/>
+        <parameter property="takeNum" resultMap="ordersResult" jdbcType="VARCHAR"/>
+        <parameter property="reservedPhone" resultMap="ordersResult" jdbcType="VARCHAR"/>
+        <parameter property="content" resultMap="ordersResult" jdbcType="VARCHAR"/>
+    </parameterMap>
+
+    <insert id="addOrder" parameterType="Order">
+        insert into orders(order_id,company,receiver,accept_add_code,accept_address,take_num,reserved_phone,sta_id,content)values (#{orderId},#{company},#{receiver},#{acceptAddCode},#{acceptAddress},#{takeNum},#{reservedPhone},#{staId},#{content});
+    </insert>
+
+    <select id="getOrderByToakenNum" parameterType="java.lang.String" resultMap="ordersResult">
+        select * from orders where take_num=#{tokenNum}
+    </select>
+
+    <select id="selectOrderById" parameterType="java.lang.String" resultMap="ordersResult">
+      SELECT * from orders WHERE order_id=#{id}
+    </select>
+    <delete id="deleteOrder" parameterType="java.lang.String">
+        DELETE FROM orders WHERE order_id=#{orderId}
+    </delete>
+</mapper>

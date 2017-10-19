@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.firm.dao.FirmDao">
+
+    <!-- 首页展示所有快递订单：仅仅显示7条数据 -->
+    <select id="selectAllFirmByOrderAcceptAddCode" resultMap="firmResultMap">
+        SELECT f.firm_id,f.use_id,f.ord_id,f.order_state,f.address,f.give_time,f.ask_time,f.remark,f.order_money,f.goods_money,
+                u.name,u.portrait,u.sex,
+                o.accept_add_code,o.company,o.sta_id,o.accept_address
+        FROM firm f,orders o,user u
+        WHERE f.ord_id = o.order_id
+        AND f.use_id=u.user_id
+        AND o.accept_add_code LIKE #{acceptAddCode}
+        AND f.order_state != 03
+        AND f.order_state != 04
+        <if test="staId != 0">
+            AND o.sta_id = #{staId}
+        </if>
+        ORDER BY f.order_state ASC,f.give_time DESC
+        <if test="count == 0">
+            limit #{count},7
+        </if>
+        <if test="count != 0">
+            limit #{count},5
+        </if>
+    </select>
+
+    <!--订单首页-->
+    <select id="selectAllFirmByUserId" resultMap="firmResultMap">
+        SELECT f.firm_id,f.bri_id,f.use_id,f.ord_id,f.order_state,f.address,f.finish_time,f.give_time,f.accept_time,f.cancle_time,
+                o.accept_add_code,o.receiver,o.reserved_phone,o.sta_id,o.company,o.accept_address
+        FROM firm f,orders o,user u
+        WHERE  f.ord_id = o.order_id
+        AND f.use_id=u.user_id
+        AND f.use_id = #{useId}
+        AND f.order_state = #{orderState}
+        <if test="orderState == 0">
+            ORDER BY f.give_time DESC
+        </if>
+        <if test="orderState == 1">
+            ORDER BY f.accept_time DESC
+        </if>
+        <if test="orderState == 2">
+            ORDER BY f.finish_time DESC
+        </if>
+        <if test="orderState == 3">
+            ORDER BY f.cancle_time DESC
+        </if>
+    </select>
+
+    <!-- 订单详情 -->
+    <select id="selectFirmDetail" resultMap="firmResultMap">
+        SELECT f.firm_id,f.bri_id,f.use_id,f.address,f.ask_time,f.remark,f.order_money,f.order_state,f.give_time,f.is_apply_cancel,f.goods_money,
+                o.receiver,o.take_num,o.reserved_phone,o.accept_add_code,o.company,o.sta_id,o.accept_address,o.content,
+                u.user_id,u.phone_num,u.name,u.open_id
+        FROM firm f,orders o,user u
+        WHERE f.ord_id = o.order_id
+        AND f.use_id=u.user_id
+        AND f.firm_id = #{firmId}
+    </select>
+
+    <!--带单首页-->
+    <select id="selectAllFirmByBringerId" resultMap="firmResultMap">
+        SELECT f.firm_id,f.use_id,u.name,f.ord_id,f.order_state,f.address,f.finish_time,f.give_time,f.accept_time,f.cancle_time,f.order_money,f.is_apply_cancel,
+                o.accept_add_code,o.receiver,o.reserved_phone,o.sta_id
+        FROM firm f,orders o,user u
+        WHERE  f.ord_id = o.order_id
+        AND f.use_id=u.user_id
+        AND f.bri_id = #{briId}
+        AND f.order_state = #{orderState}
+        <if test="orderState == 1">
+            ORDER BY f.accept_time DESC
+        </if>
+        <if test="orderState == 2">
+            ORDER BY f.finish_time DESC
+        </if>
+        <if test="orderState == 3">
+            ORDER BY f.cancle_time DESC
+        </if>
+    </select>
+
+    <resultMap id="firmResultMap" type="Firm">
+        <id property="firmId" column="firm_id" jdbcType="VARCHAR"/>
+        <result property="briId" column="bri_id" jdbcType="INTEGER"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="askTime" column="ask_time"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="orderMoney" column="order_money" jdbcType="INTEGER"/>
+        <result property="giveTime" column="give_time"/>
+        <result property="acceptTime" column="accept_time"/>
+        <result property="finishTime" column="finish_time"/>
+        <result property="cancleTime" column="cancle_time"/>
+        <result property="orderState" column="order_state" jdbcType="INTEGER"/>
+        <result property="isApplyCancel" column="is_apply_cancel" jdbcType="INTEGER"/>
+        <association property="user" javaType="User">
+            <id property="userId" column="use_id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="portrait" column="portrait" jdbcType="VARCHAR"/>
+            <result property="phoneNum" column="phone_num" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="registerTime" column="register_time"/>
+            <result property="role" column="role" jdbcType="VARCHAR"/>
+            <result property="recetlyLoginTime" column="recetly_login_time"/>
+            <result property="orderNum" column="order_num" jdbcType="INTEGER"/>
+            <result property="spending" column="spending" jdbcType="DOUBLE"/>
+            <result property="sex" column="sex" jdbcType="INTEGER"/>
+            <result property="openId" column="open_id" jdbcType="VARCHAR"/>
+        </association>
+        <association property="order" javaType="Order">
+            <id property="orderId" column="ord_id" jdbcType="VARCHAR"/>
+            <result property="staId" column="sta_id" jdbcType="INTEGER"/>
+            <result property="acceptAddCode" column="accept_add_code" jdbcType="VARCHAR"/>
+            <result property="company" column="company" jdbcType="VARCHAR"/>
+            <result property="receiver" column="receiver" jdbcType="VARCHAR"/>
+            <result property="tokenNum" column="token_num" jdbcType="VARCHAR"/>
+            <result property="reservedPhone" column="reserved_phone" jdbcType="VARCHAR"/>
+            <result property="acceptAddress" column="accept_address" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <select id="selectFirmSatus" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT order_state FROM firm WHERE firm_id = #{firmId}
+    </select>
+
+    <select id="selectIsApplyCancel" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT is_apply_cancel FROM firm WHERE firm_id = #{firmId}
+    </select>
+
+    <update id="updateFirmBringer" parameterType="Firm">
+        UPDATE firm SET bri_id = #{briId} WHERE firm_id = #{firmId}
+    </update>
+
+    <update id="updateFirmAcceptTime" parameterType="Firm">
+        UPDATE firm SET accept_time = #{acceptTime} ,order_state =#{orderState} WHERE firm_id = #{firmId}
+    </update>
+    <update id="updateFirmCancleTime" parameterType="Firm">
+        UPDATE firm SET cancle_time = #{cancleTime} ,order_state =#{orderState} WHERE firm_id = #{firmId}
+    </update>
+    <update id="updateFirmFinishTime" parameterType="Firm">
+        UPDATE firm SET finish_time = #{finishTime} ,order_state =#{orderState} WHERE firm_id = #{firmId}
+    </update>
+    <update id="updataFirmPayFinish" parameterType="Firm">
+        UPDATE firm SET order_state =#{orderState} WHERE firm_id = #{firmId}
+    </update>
+
+    <insert id="addFirm" parameterType="Firm">
+        insert into firm(firm_id,use_id,ord_id,give_time,order_state,address,ask_time,order_money,remark,goods_money)values (#{firm.firmId},#{userId},#{orderId},now(),04,#{firm.address},#{firm.askTime},#{firm.orderMoney},#{firm.remark},#{firm.goodsMoney});
+    </insert>
+
+    <update id="updateFirm">
+        UPDATE firm SET order_state =#{orderState} WHERE firm_id = #{firmId}
+    </update>
+    <update id="updateIsApplyCancel">
+        UPDATE firm SET is_apply_cancel =#{isApplyCancel} WHERE firm_id = #{firmId}
+    </update>
+
+    <!-- 定时任务 -->
+    <update id="updateAllFirmByOrderState">
+        update firm set order_state = #{newOrderState},finish_time = #{finishTime} where order_state = #{oldOrderState}
+    </update>
+
+    <!-- 定时任务 -->
+    <select id="selectAllFirmByOrderState" parameterType="java.lang.Integer" resultType="Firm">
+        SELECT firm_id,bri_id,order_money FROM firm WHERE order_state = #{orderState}
+    </select>
+
+    <delete id="deleteNoPayFirm" parameterType="java.lang.Integer">
+        DELETE FROM firm WHERE order_state=#{orderState}
+    </delete>
+
+    <!--<select id="selectPhoneNumAndMoneyByFirmId" parameterType="java.lang.String" resultMap="firmResultMap">-->
+        <!--SELECT u.phone_num,f.order_money FROM firm f,user u WHERE firm_id = #{firmId}-->
+    <!--</select>-->
+
+    <!---管理员页面通过分页获取订单列表-->
+    <select id="selectFirmsByTableParams" resultMap="firmResultMap">
+        SELECT
+        f.firm_id,o.accept_add_code,f.use_id,u.name,o.receiver,f.order_state,o.sta_id,f.give_time,f.order_money
+        FROM firm f,orders o,user u
+        WHERE f.ord_id = o.order_id
+        AND f.use_id=u.user_id
+        ORDER BY f.order_state ASC,f.give_time DESC
+    </select>
+
+   <!-- 管理端端查看订单详情-->
+    <select id="selectFirmDetailToAdmin" resultMap="firmResultMap">
+        SELECT f.firm_id,f.bri_id,f.use_id,f.address,f.ask_time,f.remark,f.order_money,f.order_state,f.give_time,f.ask_time,f.finish_time,f.accept_time,f.cancle_time,f.is_apply_cancel,
+        o.receiver,o.take_num,o.reserved_phone,o.accept_add_code,o.company,o.sta_id,
+        u.user_id,u.phone_num,u.name,u.open_id
+        FROM firm f,orders o,user u
+        WHERE f.ord_id = o.order_id
+        AND f.use_id=u.user_id
+        AND f.firm_id = #{firmId}
+    </select>
+
+</mapper>

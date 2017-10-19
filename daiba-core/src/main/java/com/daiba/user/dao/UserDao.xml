@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.user.dao.UserDao">
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user(phone_num,password,name,portrait,register_time,recetly_login_time,sex,open_id)
+        VALUES (#{phoneNum},#{password},#{name},#{portrait},#{registerTime},#{recetlyLoginTime},#{sex},#{openId})
+    </insert>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="userResult">
+        SELECT * FROM user WHERE user_id=#{id}
+    </select>
+
+    <select id="selectSendUserInfo" parameterType="java.lang.Integer" resultMap="userResult">
+        SELECT user_id,name,portrait,phone_num,open_id FROM user WHERE user_id=#{id}
+    </select>
+
+    <select id="selectAcceptUserInfo" parameterType="java.lang.Integer" resultMap="userResult">
+        SELECT user_id,name,portrait,phone_num,open_id FROM user WHERE bri_id=#{briId}
+    </select>
+
+    <select id="selectByPhoneNum" parameterType="java.lang.String" resultMap="userResult">
+        SELECT * FROM user WHERE phone_num=#{phoneNum}
+    </select>
+
+    <select id="selectIdByPhoneNum" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT user_id FROM user WHERE phone_num=#{phoneNum}
+    </select>
+
+    <update id="updateUserInfo" parameterMap="userParameter">
+        UPDATE user SET password=#{password},recetly_login_time=#{recetlyLoginTime} WHERE user_id=#{userId}
+    </update>
+
+    <select id="selectUserCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM user
+    </select>
+
+    <parameterMap id="userParameter" type="User">
+        <parameter property="userId" resultMap="userResult"/>
+        <parameter property="phoneNum" resultMap="userResult"/>
+        <parameter property="registerTime" resultMap="userResult"/>
+        <parameter property="recetlyLoginTime" resultMap="userResult"/>
+        <parameter property="openId" resultMap="userResult"/>
+    </parameterMap>
+
+    <resultMap id="userResult" type="User">
+        <id column="user_id" property="userId"/>
+        <result column="phone_num" property="phoneNum"/>
+        <result column="register_time" property="registerTime"/>
+        <result column="recetly_login_time" property="recetlyLoginTime"/>
+        <result column="open_id" property="openId"/>
+    </resultMap>
+
+    <update id="updateUserOrderNumAndSpending">
+        UPDATE user SET order_num=order_num+1,spending=spending+#{spending} WHERE user_id=#{userId}
+    </update>
+    <update id="downUserOrderNumAndSpending">
+        UPDATE user SET order_num=order_num-1,spending=spending-#{spending} WHERE user_id=#{userId}
+    </update>
+
+    <select id="selectOpenIdByBringId" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT open_id FROM user WHERE bri_id=#{briId}
+    </select>
+
+    <select id="selectUserByOpenId" resultMap="userResult" parameterType="java.lang.String">
+        SELECT * FROM user WHERE open_id = #{openId}
+    </select>
+
+    <select id="selectAllOpenId" resultType="java.lang.String" >
+        SELECT open_id FROM user WHERE role=#{role}
+    </select>
+
+    <select id="selectAllUserInfo" resultMap="userResult">
+        SELECT * FROM user order by recetly_login_time DESC
+    </select>
+
+    <select id="selectUserByBriId" resultMap="userResult" parameterType="java.lang.Integer">
+        SELECT * from user where bri_id=${briId}
+    </select>
+</mapper>

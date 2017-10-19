@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiba.admin.dao.AdminDao">
+
+    <select id="selectByAccount" parameterType="java.lang.String" resultMap="adminResult">
+        SELECT * FROM admin WHERE account = #{account}
+    </select>
+
+    <update id="updateAdminTime" parameterMap="adminParameter">
+        UPDATE admin SET recetly_login_time = #{recetlyLoginTime} WHERE admin_id = #{adminId}
+    </update>
+
+    <parameterMap id="adminParameter" type="Admin">
+        <parameter property="adminId" resultMap="adminResult"/>
+        <parameter property="account" resultMap="adminResult"/>
+        <parameter property="password" resultMap="adminResult"/>
+        <parameter property="name" resultMap="adminResult"/>
+        <parameter property="phoneNum" resultMap="adminResult"/>
+        <parameter property="wx" resultMap="adminResult"/>
+        <parameter property="qq" resultMap="adminResult"/>
+        <parameter property="email" resultMap="adminResult"/>
+        <parameter property="recetlyLoginTime" resultMap="adminResult"/>
+    </parameterMap>
+
+    <resultMap id="adminResult" type="Admin">
+        <id column="admin_id" property="adminId"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="phone_num" property="phoneNum"/>
+        <result column="wx" property="wx"/>
+        <result column="qq" property="qq"/>
+        <result column="email" property="email"/>
+        <result column="recetly_login_time" property="recetlyLoginTime"/>
+    </resultMap>
+
+</mapper>

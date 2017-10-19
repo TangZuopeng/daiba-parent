@@ -1,0 +1,21 @@
+注意：导入了 阿里大于的 jar包，需要将该jar包，导入到本地maven库中
+操作如下：
+
+1、CMD命令行中，进入jar包所在目录(daibawangluo\daiba-webapp\src\main\webapp\lib\sdk-java-2016-06-07)输入以下代码，目的：导入本地jar包到本地maven库。
+mvn install:install-file -Dfile=taobao-sdk-java-auto_1455552377940-20160607.jar -DgroupId=taobao -DartifactId=taobao-sdk-java-auto_1455552377940-20160607 -Dversion=1.0 -Dpackaging=jar
+mvn install:install-file -Dfile=taobao-sdk-java-auto_1455552377940-20160607-source.jar -DgroupId=taobao -DartifactId=taobao-sdk-java-auto_1455552377940-20160607-source -Dversion=1.0 -Dpackaging=jar
+
+2、pom.xml中导入maven(已经上传)
+<dependency>
+    <groupId>taobao</groupId>
+    <artifactId>taobao-sdk-java-auto_1455552377940-20160607</artifactId>
+    <version>1.0</version>
+</dependency>
+
+<dependency>
+   <groupId>taobao</groupId>
+   <artifactId>taobao-sdk-java-auto_1455552377940-20160607-source</artifactId>
+   <version>1.0</version>
+</dependency>
+
+另外：已经解决IDEA自动重置LanguageLevel和JavaCompiler版本的问题，都为 1.7  重启生效
