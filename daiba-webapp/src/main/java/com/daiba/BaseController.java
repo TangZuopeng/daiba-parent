@@ -46,7 +46,7 @@ public class BaseController {
     }
 
     protected Boolean isWX(HttpSession session) {
-//        session.setAttribute("OPENID","123");
+        session.setAttribute("OPENID","123");
         if (session.getAttribute("OPENID") == null) {
             return false;
         }

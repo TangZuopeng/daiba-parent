@@ -135,16 +135,16 @@ public class SubController extends BaseController {
                     modelAndView.addObject("sendUser", objectMapper.writeValueAsString(sendUser));
                     modelAndView.addObject("orderDetailAdd", objectMapper.writeValueAsString(orderDetailAdd));
                     //封装接单模板消息
-                    org.json.JSONObject sendJsonObject = SendMessage.statusJsonmsg("您(" + sendUser.getName() + ")发的单有人接单啦！", firmId, "已接单", "点击进入我发的单查看详情！");
-                    org.json.JSONObject acceptJsonObject = SendMessage.acceptOrderInform("您成功抢到(" + sendUser.getName() + ")发的单！", firmId, SendMessage.format.format(new Date()), "点击进入我接的单查看详情！");
+//                    org.json.JSONObject sendJsonObject = SendMessage.statusJsonmsg("您(" + sendUser.getName() + ")发的单有人接单啦！", firmId, "已接单", "点击进入我发的单查看详情！");
+//                    org.json.JSONObject acceptJsonObject = SendMessage.acceptOrderInform("您成功抢到(" + sendUser.getName() + ")发的单！", firmId, SendMessage.format.format(new Date()), "点击进入我接的单查看详情！");
                     //给用户发送接单消息:210
-                    SendMessage.send(sendUser.getOpenId(), SendMessage.STATUS_TEMPLAT, SendMessage.GIVE_ORDER_URI, sendJsonObject);
+//                    SendMessage.send(sendUser.getOpenId(), SendMessage.STATUS_TEMPLAT, SendMessage.GIVE_ORDER_URI, sendJsonObject);
                     //给带客发送接单消息:410
-                    SendMessage.send(user.getOpenId(), SendMessage.ACCEPT_ORDER_TEMPLAT, SendMessage.ACCEPT_ORDER_URI, acceptJsonObject);
-                    if (firmDetail.getOrder().getStaId() == 33) {
-                        //给商户发送接单消息
-                        sendMessageToMerchant(firmId, giveTime, orderType, senderPhone, askTime, remark);
-                    }
+//                    SendMessage.send(user.getOpenId(), SendMessage.ACCEPT_ORDER_TEMPLAT, SendMessage.ACCEPT_ORDER_URI, acceptJsonObject);
+//                    if (firmDetail.getOrder().getStaId() == 33) {
+//                        //给商户发送接单消息
+//                        sendMessageToMerchant(firmId, giveTime, orderType, senderPhone, askTime, remark);
+//                    }
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
@@ -160,10 +160,6 @@ public class SubController extends BaseController {
 
     private void sendMessageToMerchant(String firmId, Date giveTime, String orderType, String senderPhone, Date askTime, String remark) {
         List<Map<String, Object>> firmMerchantMessages = dishesService.getMerchantMessage(firmId);
-        System.out.println("++++++++++");
-        System.out.println(firmMerchantMessages);
-        System.out.println("++++++++++");
-
 
         StringBuilder dishesNames = new StringBuilder();
         //StringBuilder dishesPrices = new StringBuilder();

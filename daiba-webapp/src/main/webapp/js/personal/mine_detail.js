@@ -70,7 +70,7 @@ function init(){
                 var flag=result.flag;
                 if(flag){
                     $("#uNickNameId").text(personalInfo.name);//昵称
-                    $("#uHeakIconId").attr('src',personalInfo.portrait);//头像
+                    $("#uHeakIconId").attr('src',imgPath + personalInfo.portrait);//头像
                     if(null!=personalInfo.sex&&personalInfo.sex>0){
                         $("#uSexId").text(personalInfo.sex==1?'男':'女');//性别
                     }else{

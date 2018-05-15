@@ -53,17 +53,9 @@ public class PaymentServiceImpl implements PaymentService {
         params.put("total_fee", fee);
         String sign = Signature.getSign(params);
         params.put("sign", sign);
-//        System.out.println("#PaymentService.params#");
-//        System.out.println(params);
         String requestXML = XMLUtil.getRequestXml(params);
-//        System.out.println("#PaymentService.#requestXML");
-//        System.out.println(requestXML);
         String result = HTTPRequest.ajax(ConfigUtil.UNIFIED_ORDER_URL, requestXML, HTTPRequest.POST);
-//        System.out.println("#PaymentService.#result");
-//        System.out.println(result);
         Map<String, String> map = XMLUtil.doXMLParse(result);//解析微信返回的信息，以Map形式存储便于取值
-//        System.out.println("#PaymentService.#returnMap");
-//        System.out.println(map);
         return map;
 
     }

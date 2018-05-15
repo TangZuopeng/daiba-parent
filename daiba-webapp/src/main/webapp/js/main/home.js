@@ -404,7 +404,7 @@ function createListItemFragment(data, i) {
     var img = document.createElement('img');
     img.className = 'mui-media-object mui-pull-left portrait';
     //basePath + '/img/daiba.png'  data.user.portrait
-    img.src = data.user.portrait;
+    img.src = imgPath + data.user.portrait;
     a.appendChild(img);
     var div1 = document.createElement('div');
     div1.className = 'mui-media-body';

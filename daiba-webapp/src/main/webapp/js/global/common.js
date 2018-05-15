@@ -5,6 +5,9 @@ var basePath = (function() {
     return h[0] + "//" + window.location.host + "/" + x[1];
 })();
 
+var imgPath = 'http://123.207.149.13';
+// var imgPath = '';
+
 //  页面重定向
 function redirect(url) {
     window.location.href = basePath + '/WeiXin' + url;

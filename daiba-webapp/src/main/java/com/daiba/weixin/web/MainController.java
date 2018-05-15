@@ -34,8 +34,6 @@ public class MainController extends BaseController {
         //设置session不活动时间为30分
         session.setMaxInactiveInterval(60 * 30);
 
-        System.out.println("---------home------------");
-
         if (isWX(session)) {
             return "wx/main/home";
         } else {
@@ -84,20 +82,13 @@ public class MainController extends BaseController {
      */
     @RequestMapping(value = "/getFirm.do", method = {RequestMethod.POST})
     @ResponseBody
-    public String getFirm(HttpServletRequest request) {
+    public List<Firm> getFirm(HttpServletRequest request) {
 
         int count = Integer.parseInt(request.getParameter("count"));
         int orderType = Integer.parseInt(request.getParameter("orderType"));
         //表示：初始化加载和下拉刷新
         List<Firm> firmList = firmService.showAllFirm(request.getParameter("campus") + "%", orderType, count);
-
-        //List<Firm> firmList = firmService.showAllFirm(request.getParameter("campus") + "%");
-        try {
-//            System.out.println(objectMapper.writeValueAsString(firmList));
-            return objectMapper.writeValueAsString(firmList);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return firmList;
     }
 
     /**

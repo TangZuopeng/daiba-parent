@@ -175,7 +175,7 @@ function init(){
                     $("#pOrderNum").text(personalInfo.orderNum);//发单数
                     $("#pGetOrderNum").text(personalInfo.acceptCount);//接单数
                     $("#weekIncome").text(personalInfo.weekIncome/100 + '元');
-                    $("#pHeadIcon").attr('src',personalInfo.portrait);//头像
+                    $("#pHeadIcon").attr('src',imgPath + personalInfo.portrait);//头像
                     $("#applyBringerItem").hide();
                     //初始化新订单推送开关
                     if (personalInfo.isReceiver == 1){

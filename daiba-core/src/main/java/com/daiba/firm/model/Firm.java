@@ -2,6 +2,7 @@ package com.daiba.firm.model;
 
 import com.daiba.order.model.Order;
 import com.daiba.user.model.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
@@ -100,6 +101,7 @@ public class Firm {
         this.firmId = firmId;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date getGiveTime() {
         return giveTime;
     }
@@ -108,6 +110,7 @@ public class Firm {
         this.giveTime = giveTime;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date getAcceptTime() {
         return acceptTime;
     }
@@ -116,6 +119,7 @@ public class Firm {
         this.acceptTime = acceptTime;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date getFinishTime() {
         return finishTime;
     }
@@ -124,6 +128,7 @@ public class Firm {
         this.finishTime = finishTime;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date getCancleTime() {
         return cancleTime;
     }
@@ -140,6 +145,7 @@ public class Firm {
         this.address = address;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date getAskTime() {
         return askTime;
     }

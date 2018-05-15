@@ -35,7 +35,7 @@ public class BaseListener implements ServletContextListener {
         ServletContext servletContext = servletContextEvent.getServletContext();
         String str = (String) servletContext.getAttribute("wxServer");
         if (str == null) {
-            WX.getInstance().initWX();
+//            WX.getInstance().initWX();
         }
     }
 

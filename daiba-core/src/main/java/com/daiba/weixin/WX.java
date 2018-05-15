@@ -49,7 +49,7 @@ public class WX {
 
     //测试号：32fdb38b8e7d75d05b1b98e2eaf5a9f7
     //服务号：fcad129265d90bdb3a6718d536ec000d
-    public static final String AppSecret = "fcad129265d90bdb3a6718d536ec000d";
+    public static final String AppSecret = "ec02758e859cbf8564b1d87271cf8e71";
 
     public static WX getInstance() {
         if (instance == null)

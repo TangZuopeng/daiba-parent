@@ -8,14 +8,13 @@ import com.daiba.merchant.dao.MerchantDao;
 import com.daiba.user.dao.BringerDao;
 import com.daiba.user.dao.UserDao;
 import com.daiba.user.model.User;
+import com.daiba.utils.RedisUtils;
 import com.daiba.utils.SendMessage;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by dolphinzhou on 2016/10/16.
@@ -38,9 +37,25 @@ public class FirmServiceImpl implements FirmService {
     @Autowired
     private MerchantDao merchantDao;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
     @Override
     public List<Firm> showAllFirm(String acceptAddCode, int orderType, int count) {
-        return firmDao.selectAllFirmByOrderAcceptAddCode(acceptAddCode, orderType, count);
+        List<Firm> firms = null;
+        String key = RedisUtils.ORDER_PRE + acceptAddCode + "|" + orderType;
+        if (count != 0) {
+            return firmDao.selectAllFirmByOrderAcceptAddCode(acceptAddCode, orderType, count);
+        }
+        List<Object> list = redisUtils.lGet(key, 0, 1);
+        if (null == list || list.isEmpty()) {
+            firms = firmDao.selectAllFirmByOrderAcceptAddCode(acceptAddCode, orderType, count);
+            redisUtils.lSet(key, firms);
+            return firms;
+        }
+        firms = new ArrayList<>();
+        System.out.println(list);
+        return firms;
     }
 
     @Override

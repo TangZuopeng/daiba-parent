@@ -83,10 +83,7 @@ public class Payment extends BaseController {
         String openid  = (String) request.getSession().getAttribute("OPENID");
         String firmId = request.getParameter("firmId");
         String fee = request.getParameter("fee");
-//        System.out.println("金额：" + fee);
         int userId = getUserId(request);
-//        System.out.println("-----openid-----");
-//        System.out.println(openid);
         Map map = null;
         try {
             //在PaymentService中发起预支付请求，得到map
@@ -109,7 +106,6 @@ public class Payment extends BaseController {
         char agent = userAgent.charAt(userAgent.indexOf("MicroMessenger") + 15);
         params.put("agent", new String(new char[]{agent}));//微信版本号，用于前面提到的判断用户手机微信的版本是否是5.0以上版本。
         JSONObject json = new JSONObject(params);
-        System.out.println(json);
         return json.toString();
 
     }
@@ -185,7 +181,7 @@ public class Payment extends BaseController {
                 int userId = firm.getUser().getUserId();
                 userService.sendOrderSuccess(userId,fee);
 
-                //模板消息所需的订单消息
+                /*//模板消息所需的订单消息
                 String acceptAddress = firm.getOrder().getAcceptAddress();
                 String address = firm.getAddress();
                 if (acceptAddress == null){
@@ -224,8 +220,7 @@ public class Payment extends BaseController {
                 for(String openId : openIds){
                     //发单提醒所有带客的模板消息
                     SendMessage.send(openId, SendMessage.NEW_ORDER_TEMPLAT, "", inform);
-                }
-                System.out.println("-------------"+ XMLUtil.setXML("SUCCESS", ""));
+                }*/
             }
         }
     }

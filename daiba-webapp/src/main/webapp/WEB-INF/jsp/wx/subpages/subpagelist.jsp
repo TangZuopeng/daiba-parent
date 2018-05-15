@@ -153,6 +153,9 @@
             <a class="mui-control-item" href="#cancelOrder">
                 已取消
             </a>
+            <a class="mui-control-item" href="#nopayOrder">
+                未付款
+            </a>
         </div>
         <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-3"></div>
         <div class="mui-slider-group">
@@ -188,6 +191,16 @@
             </div>
             <div id="cancelOrder" class="mui-slider-item mui-control-content">
                 <div id="scroll4" class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-loading">
+                            <div class="mui-spinner">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="nopayOrder" class="mui-slider-item mui-control-content">
+                <div id="scroll5" class="mui-scroll-wrapper">
                     <div class="mui-scroll">
                         <div class="mui-loading">
                             <div class="mui-spinner">

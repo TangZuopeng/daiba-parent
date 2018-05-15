@@ -35,4 +35,5 @@ public class ConfigUtil {
 
     //自定义菜单链接
     public static final String MENU_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxefafe5d086334c61&redirect_uri=http://www.ainitzp.cn/daiba-webapp/WeiXin/authorize/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect&connect_redirect=1";
+
 }
